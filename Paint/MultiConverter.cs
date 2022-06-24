@@ -5,7 +5,8 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using Paint.Models.CanvasFigure;
+using Paint.Models;
+using Ellipse = System.Windows.Shapes.Ellipse;
 
 namespace Paint
 {
@@ -13,22 +14,24 @@ namespace Paint
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            ObservableCollection<Shape> shapeColl = new ObservableCollection<Shape>();
-            foreach (var item in values[0] as ObservableCollection<IDisplayable>)
+            var shapeColl = new ObservableCollection<Shape>();
+            foreach (var item in (ObservableCollection<IDisplayable>) values[0])
             {
                 shapeColl.Add(item.CreateShape());
             }
 
-            foreach (var item in values[1] as ObservableCollection<Point>)
+            foreach (var item in (ObservableCollection<Point>) values[1])
             {
-                Ellipse points = new Ellipse();
-                points.Width = 5;
-                points.Height = 5;
-                points.StrokeThickness = 0;
-                points.Margin = new Thickness(item.X - 2.5, item.Y - 2.5, 0, 0);
-                points.Fill = Brushes.Crimson;
-                
-                shapeColl.Add(points);
+                var point = new Ellipse
+                {
+                    Width = 5,
+                    Height = 5,
+                    StrokeThickness = 0,
+                    Margin = new Thickness(item.X - 2.5, item.Y - 2.5, 0, 0),
+                    Fill = Brushes.Crimson
+                };
+
+                shapeColl.Add(point);
             }
             return shapeColl;
         }

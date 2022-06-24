@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using Paint.Models.CanvasFigure;
+using Paint.Models;
 
 namespace Paint
 {
@@ -14,18 +13,19 @@ namespace Paint
         private ObservableCollection<IDisplayable> _figures;
         public ObservableCollection<IDisplayable> Figures
         {
-            get { return _figures; }
+            get => _figures;
             set
             {
                 _figures = value;
                 NotifyPropertyChanged(nameof(Figures));
             }
         }
+        
 
         private ObservableCollection<Point> _points;
         public ObservableCollection<Point> Points
         {
-            get { return _points; }
+            get => _points;
             set
             {
                 _points = value;
@@ -33,7 +33,18 @@ namespace Paint
             }
         }
 
-        public ObservableCollection<ButtonWrapper> ButtonWrappers { get; }
+        private ObservableCollection<ButtonWrapper> _buttonWrappers;
+
+        public ObservableCollection<ButtonWrapper> ButtonWrappers
+        {
+            get => _buttonWrappers;
+            set
+            {
+                _buttonWrappers = value;
+                NotifyPropertyChanged(nameof(ButtonWrappers));
+            }
+        }
+        
 
         public ViewModel()
         {
@@ -41,18 +52,15 @@ namespace Paint
             Points.CollectionChanged += (sender, args) => NotifyPropertyChanged(nameof(Points));
             
             ButtonWrappers = new ObservableCollection<ButtonWrapper>();
-            AddButtonWrapper(FiguresFactory.CreateCircle, "Circle");
-            AddButtonWrapper(FiguresFactory.CreateEllipse, "Ellipse");
-            AddButtonWrapper(FiguresFactory.CreateRectangle, "Rectangle");
-            AddButtonWrapper(FiguresFactory.CreateRegularPolygon, "RegularPolygon");
-            AddButtonWrapper(FiguresFactory.CreateSegment, "Segment");
-            AddButtonWrapper(FiguresFactory.CreateTriangle, "Triangle");
+            AddButtonWrapper(Circle.CreateCircle, "Circle"); 
+            AddButtonWrapper(MyEllipse.CreateEllipse, "Ellipse");
+            AddButtonWrapper(Rectangle.CreateRectangle, "Rectangle");
+            AddButtonWrapper(RegularPolygon.CreateRegularPolygon, "RegularPolygon");
+            AddButtonWrapper(Segment.CreateSegment, "Segment");
+            AddButtonWrapper(RightTriangle.CreateRightTriangle, "Triangle");
             
             Figures = new ObservableCollection<IDisplayable>();
             Figures.CollectionChanged += (sender, args) => NotifyPropertyChanged(nameof(Figures));
-
-            Figures.Add(new CanvasCircle(new Point(100, 100), 40));
-            Figures.Add(new CanvasEllipse(new Point(200, 200), 40, 20));
         }
 
 
@@ -70,13 +78,13 @@ namespace Paint
         
         private void AddFigure(BuildFigure method)
         {
-            IDisplayable figure = method(new Queue<Point>(Points));
+            var figure = method(new Queue<Point>(Points));
 
-            if (figure != null)
-            {
-                Figures.Add(figure);
-                Points.Clear();
-            }
+            if (figure == null) 
+                return;
+            
+            Figures.Add(figure);
+            Points.Clear();
         }
         public void AddButtonWrapper(BuildFigure method, string content)
         {

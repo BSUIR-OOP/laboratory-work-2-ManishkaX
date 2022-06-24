@@ -1,2 +1,4 @@
-bin/*
-obj/*
+.idea
+README.md
+Paint/bin/*
+Paint/obg/*

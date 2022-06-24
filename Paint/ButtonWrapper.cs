@@ -10,7 +10,7 @@ namespace Paint
 
         public ICommand Command
         {
-            get { return _command; }
+            get => _command;
             set
             {
                 _command = value;
@@ -22,7 +22,7 @@ namespace Paint
 
         public string Content
         {
-            get { return _content; }
+            get => _content;
             set
             {
                 _content = value;

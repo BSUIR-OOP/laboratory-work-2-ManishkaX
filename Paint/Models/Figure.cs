@@ -5,19 +5,22 @@ namespace Paint.Models
 {
     public abstract class Figure
     {
-        protected Point Offset;
+        protected Point FirstPoint;
+
+        protected Point SecondPoint;
+        
+        protected Color Color { get; }
+
+        protected double Thickness { get; }
 
 
-        public Color Color { get; set; }
-
-        public double Thickness { get; set; }
-
-
-        protected Figure(Point offset)
+        protected Figure(Point firstPoint, Point secondPoint)
         {
             Color = Color.FromRgb(255, 40, 40);
             Thickness = 5;
-            Offset = offset;
+            
+            FirstPoint = firstPoint;
+            SecondPoint = secondPoint;
         }
         
     }

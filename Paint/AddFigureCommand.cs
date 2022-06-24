@@ -5,9 +5,9 @@ namespace Paint
 {
     public class AddFigureCommand : ICommand
             {
-                private BuildFigure _delegate;
+                private readonly BuildFigure _delegate;
 
-                private Action<BuildFigure> _action;
+                private readonly Action<BuildFigure> _action;
 
 
                 public AddFigureCommand(Action<BuildFigure> action, BuildFigure method)
