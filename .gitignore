@@ -1,4 +1,5 @@
 .idea
 README.md
 Paint/bin/*
-Paint/obg/*
+Paint/obj/*
+.DS_Store
